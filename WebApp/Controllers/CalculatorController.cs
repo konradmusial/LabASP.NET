@@ -12,7 +12,7 @@ public class CalculatorController : Controller
             ViewBag.ErrorMessage = "Niepoprawny format liczby x lub y lub ich brak!";
             return View("KalkulatorError");
         }
-        
+        //a
         double? result = 0.0d;
         switch (op)
         {
