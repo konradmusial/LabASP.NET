@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using WebApp.Models;
 using WebApp.Models.Services;
 
@@ -23,7 +24,15 @@ namespace WebApp.Controllers
         [HttpGet]
         public IActionResult Add()
         {
-            return View();
+            var model = new ContactModel();
+            model.Organizations = _contactService.GetAllOrganizations()
+                .Select(e => new SelectListItem()
+                {
+                    Value = e.Id.ToString(),
+                    Text = e.Name,
+                    Selected = e.Id == 102
+                }).ToList();
+            return View(model);
         }
 
         // Obsługuje zapis danych kontaktu
@@ -32,7 +41,14 @@ namespace WebApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(model); // Przekazujemy model z powrotem do widoku, jeśli są błędy
+                model.Organizations = _contactService.GetAllOrganizations()
+                    .Select(e => new SelectListItem()
+                    {
+                        Value = e.Id.ToString(),
+                        Text = e.Name,
+                        Selected = e.Id == model.Id
+                    }).ToList();
+                return View(model);
             }
             _contactService.Add(model);
             return RedirectToAction(nameof(Index));

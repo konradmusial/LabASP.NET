@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace WebApp.Models;
 
@@ -34,4 +36,10 @@ public class ContactModel
     public DateOnly BirthDate { get; set; }
     [Display(Name = "Kategoria", Order = 6)]
     public Category Category { get; set; }
+    [HiddenInput]
+    public int OrganizationId { get; set; }
+    [Display(Name = "Organizacja")]
+    public OrganizationEntity? Organization { get; set; }
+    [ValidateNever]
+    public List<SelectListItem> Organizations { get; set; }
 }

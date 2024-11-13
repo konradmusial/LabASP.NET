@@ -31,13 +31,22 @@ public class EFContactService: IContactService
     public List<ContactModel> GetAll()
     {
         return _context.Contacts
+            .Include(e => e.Orgnization)
             .Select(e => ContactMapper.FromEntity(e))
             .ToList();
     }
 
     public ContactModel? GetById(int id)
     {
-        var entity = _context.Contacts.Find(id);
+        var entity = _context
+            .Contacts
+            .Include(c => c.Orgnization)
+            .FirstOrDefault(c => c.Id == id);
         return entity != null ? ContactMapper.FromEntity(entity) : null;
+    }
+
+    public List<OrganizationEntity> GetAllOrganizations()
+    {
+        return _context.Organization.ToList();
     }
 }

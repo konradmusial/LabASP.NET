@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace WebApp.Models;
 
 public class ContactMapper
@@ -12,7 +14,10 @@ public class ContactMapper
             BirthDate = arg.BirthDate,
             Email = arg.Email,
             PhoneNumber = arg.PhoneNumber,
-            Category = arg.Category
+            Category = arg.Category,
+            Orgnization = arg.Organization,
+            OrganizationId = arg.OrganizationId
+            
         };
     }
 
@@ -26,7 +31,10 @@ public class ContactMapper
             BirthDate = arg.BirthDate,
             Email = arg.Email,
             PhoneNumber = arg.PhoneNumber,
-            Category = arg.Category
+            Category = arg.Category,
+            Organization = arg.Orgnization,
+            OrganizationId = arg.OrganizationId
+            
         };
     }
 }

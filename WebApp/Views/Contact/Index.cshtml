@@ -17,6 +17,7 @@
             <th>@Html.DisplayNameFor(d => d[0].FirstName)</th>
             <th>@Html.DisplayNameFor(d => d[0].LastName)</th>
             <th>@Html.DisplayNameFor(d => d[0].Category)</th>
+            <th>@Html.DisplayNameFor(e => e[0].Organization)</th>
             <th>
                 <th class="text-end">Operacje</th>
             </th>
@@ -35,6 +36,9 @@
                 <td>
                     @entry.Category.GetDisplayName()
                 </td>
+                <th>
+                    @(entry.Organization?.Name??"brak organiacji")
+                </th>
                 <td>
                     <a class="btn btn-success"
                        asp-action="Edit"

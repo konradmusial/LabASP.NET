@@ -25,8 +25,13 @@ public class ContactEntity
     public string PhoneNumber { get; set; }
     
     public DateOnly BirthDate { get; set; }
+    
     [Display(Name = "Kategoria", Order = 6)]
     public Category Category { get; set; }
 
     public DateTime Created { get; set; }
+
+    public int OrganizationId { get; set; }
+
+    public OrganizationEntity? Orgnization { get; set; }
 }
