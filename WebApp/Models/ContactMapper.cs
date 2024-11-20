@@ -15,7 +15,7 @@ public class ContactMapper
             Email = arg.Email,
             PhoneNumber = arg.PhoneNumber,
             Category = arg.Category,
-            Orgnization = arg.Organization,
+            Organization = arg.Organization,
             OrganizationId = arg.OrganizationId
             
         };
@@ -32,7 +32,7 @@ public class ContactMapper
             Email = arg.Email,
             PhoneNumber = arg.PhoneNumber,
             Category = arg.Category,
-            Organization = arg.Orgnization,
+            Organization = arg.Organization,
             OrganizationId = arg.OrganizationId
             
         };

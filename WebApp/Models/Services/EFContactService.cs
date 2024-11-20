@@ -31,7 +31,7 @@ public class EFContactService: IContactService
     public List<ContactModel> GetAll()
     {
         return _context.Contacts
-            .Include(e => e.Orgnization)
+            .Include(e => e.Organization)
             .Select(e => ContactMapper.FromEntity(e))
             .ToList();
     }
@@ -40,7 +40,7 @@ public class EFContactService: IContactService
     {
         var entity = _context
             .Contacts
-            .Include(c => c.Orgnization)
+            .Include(c => c.Organization)
             .FirstOrDefault(c => c.Id == id);
         return entity != null ? ContactMapper.FromEntity(entity) : null;
     }

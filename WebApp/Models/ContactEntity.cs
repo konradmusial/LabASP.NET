@@ -33,5 +33,5 @@ public class ContactEntity
 
     public int OrganizationId { get; set; }
 
-    public OrganizationEntity? Orgnization { get; set; }
+    public OrganizationEntity? Organization { get; set; }
 }

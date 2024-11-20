@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 
 namespace WebApp.Models;
 
-public class AppDbContext: DbContext
+public class AppDbContext: IdentityDbContext<IdentityUser>
 {
     public DbSet<ContactEntity> Contacts { get; set; }
     public DbSet<OrganizationEntity> Organization { get; set; }
@@ -23,8 +25,76 @@ public class AppDbContext: DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+        var ADMIN_ID = Guid.NewGuid().ToString();
+        var ADMIN_ROLE_ID = Guid.NewGuid().ToString();
+        var USER_ID = Guid.NewGuid().ToString();
+        var USER_ROLE_ID = Guid.NewGuid().ToString();
+        //dodaj role user
+        modelBuilder.Entity<IdentityRole>()
+            .HasData(
+                new IdentityRole()
+                {
+                    Id = ADMIN_ROLE_ID,
+                    Name = "admin",
+                    NormalizedName = "admin".ToUpper(),
+                    ConcurrencyStamp = ADMIN_ROLE_ID
+                },
+        new IdentityRole()
+            {
+                Id = USER_ROLE_ID,
+                Name = "user",
+                NormalizedName = "user".ToUpper(),
+                ConcurrencyStamp = USER_ROLE_ID
+            }
+            );
+        var admin = new IdentityUser()
+        {
+            Id = ADMIN_ID,
+            UserName = "karol",
+            NormalizedUserName = "karol".ToUpper(),
+            Email = "karol@wsei.edu.pl",
+            NormalizedEmail = "karol@wsei.edu.pl".ToUpper(),
+            EmailConfirmed = true
+        };
+        var user = new IdentityUser()
+        {
+            Id = USER_ID,
+            UserName = "maciek",
+            NormalizedUserName = "maciek".ToUpper(),
+            Email = "maciek@wsei.edu.pl",
+            NormalizedEmail = "maciek@wsei.edu.pl".ToUpper(),
+            EmailConfirmed = true
+        };
+        // utworz uzytkownika user
+        
+        PasswordHasher<IdentityUser> hasher = new PasswordHasher<IdentityUser>();
+        admin.PasswordHash = hasher.HashPassword(admin, "1234!");
+        user.PasswordHash = hasher.HashPassword(user, "abcd@");
+        modelBuilder.Entity<IdentityUser>()
+            .HasData(admin, user);
+
+        modelBuilder.Entity<IdentityUserRole<string>>()
+            .HasData(
+                new IdentityUserRole<string>
+                {
+                    RoleId = ADMIN_ROLE_ID,
+                    UserId = ADMIN_ID
+                },
+                new IdentityUserRole<string>
+            {
+                RoleId = USER_ROLE_ID,
+                UserId = USER_ID
+            },
+                new IdentityUserRole<string>
+            {
+                RoleId = USER_ROLE_ID,
+                UserId = ADMIN_ID
+            }
+            );
+        
         modelBuilder.Entity<OrganizationEntity>()
-            .ToTable("organization")
+            .ToTable("organizations")
             .HasData(
                 new OrganizationEntity()
                 {
@@ -64,7 +134,7 @@ public class AppDbContext: DbContext
                     PhoneNumber = "123 123 123",
                     BirthDate = new DateOnly(year: 2000, month: 12, day: 13),
                     Created = DateTime.Now,
-                    OrganizationId = 101,
+                    OrganizationId = 101
                 },
                 new ContactEntity()
                 {
