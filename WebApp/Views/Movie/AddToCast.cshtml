@@ -1,0 +1,34 @@
+@model WebApp.Models.Movies.MovieCast
+
+<h2>Dodaj nową postać do obsady</h2>
+
+<form asp-action="AddToCast" method="post">
+<div class="form-group">
+    <label for="CharacterName">Imię postaci</label>
+    <input type="text" class="form-control" id="CharacterName" name="CharacterName" required />
+    </div>
+
+    <div class="form-group">
+    <label for="PersonName">Imię i nazwisko aktora</label>
+    <input type="text" class="form-control" id="PersonName" name="PersonName" required />
+    </div>
+
+    <div class="form-group">
+    <label for="GenderId">Płeć</label>
+    <select class="form-control" id="GenderId" name="GenderId">
+    <option value="1">Mężczyzna</option>
+    <option value="2">Kobieta</option>
+    <option value="3">Inna</option>
+    </select>
+    </div>
+
+    <div class="form-group">
+    <label for="CastOrder">Kolejność</label>
+    <input type="number" class="form-control" id="CastOrder" name="CastOrder" required />
+    </div>
+
+    <input type="hidden" name="MovieId" value="@ViewBag.MovieId" />
+
+    <button type="submit" class="btn btn-primary mt-3">Dodaj do obsady</button>
+    <a asp-action="Details" asp-route-id="@ViewBag.MovieId" class="btn btn-secondary mt-3">Powrót</a>
+    </form>

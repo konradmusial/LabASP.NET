@@ -1,0 +1,23 @@
+@model IEnumerable<WebApp.Models.NewModel>
+
+<h2>Lista nowych modeli</h2>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Nazwa</th>
+        <th>Data utworzenia</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+    <tr>
+        <td>@item.Id</td>
+        <td>@item.Name</td>
+        <td>@item.CreatedDate.ToShortDateString()</td>
+    </tr>
+    }
+    </tbody>
+</table>

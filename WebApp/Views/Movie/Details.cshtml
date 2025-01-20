@@ -1,0 +1,163 @@
+@model WebApp.Models.Movies.Movie
+
+<h2>Szczegóły filmu</h2>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-3">Tytuł</dt>
+        <dd class="col-sm-9">@(!string.IsNullOrEmpty(Model.Title) ? Model.Title : "brak")</dd>
+
+        <dt class="col-sm-3">Budżet</dt>
+        <dd class="col-sm-9">
+            @if (Model.Budget != null)
+            {
+            @(Model.Budget.Value.ToString("C", System.Globalization.CultureInfo.CurrentCulture))
+            }
+            else
+            {
+            @("brak")
+            }
+        </dd>
+
+        <dt class="col-sm-3">Strona domowa</dt>
+        <dd class="col-sm-9">
+            @if (!string.IsNullOrWhiteSpace(Model.Homepage))
+            {
+            @Html.ActionLink(Model.Homepage, Model.Homepage)
+            }
+            else
+            {
+            @("brak")
+            }
+        </dd>
+
+        <dt class="col-sm-3">Opis</dt>
+        <dd class="col-sm-9">@(!string.IsNullOrWhiteSpace(Model.Overview) ? Model.Overview : "brak")</dd>
+
+        <dt class="col-sm-3">Popularność</dt>
+        <dd class="col-sm-9">
+            @if (Model.Popularity != null)
+            {
+            @(Model.Popularity.Value.ToString("F2"))
+            }
+            else
+            {
+            @("brak")
+            }
+        </dd>
+
+        <dt class="col-sm-3">Data premiery</dt>
+        <dd class="col-sm-9">
+            @if (Model.ReleaseDate != null)
+            {
+            @(Model.ReleaseDate.Value.ToString("yyyy-MM-dd"))
+            }
+            else
+            {
+            @("brak")
+            }
+        </dd>
+
+        <dt class="col-sm-3">Dochód</dt>
+        <dd class="col-sm-9">
+            @if (Model.Revenue != null)
+            {
+            @(Model.Revenue.Value.ToString("C", System.Globalization.CultureInfo.CurrentCulture))
+            }
+            else
+            {
+            @("brak")
+            }
+        </dd>
+
+        <dt class="col-sm-3">Czas trwania</dt>
+        <dd class="col-sm-9">
+            @if (Model.Runtime != null)
+            {
+            @(Model.Runtime.ToString() + " min")
+            }
+            else
+            {
+            @("brak")
+            }
+        </dd>
+
+        <dt class="col-sm-3">Status</dt>
+        <dd class="col-sm-9">@(!string.IsNullOrWhiteSpace(Model.MovieStatus) ? Model.MovieStatus : "brak")</dd>
+
+        <dt class="col-sm-3">Tagline</dt>
+        <dd class="col-sm-9">@(!string.IsNullOrWhiteSpace(Model.Tagline) ? Model.Tagline : "brak")</dd>
+
+        <dt class="col-sm-3">Średnia głosów</dt>
+        <dd class="col-sm-9">
+            @if (Model.VoteAverage != null)
+            {
+            @(Model.VoteAverage.Value.ToString("F2"))
+            }
+            else
+            {
+            @("brak")
+            }
+        </dd>
+
+        <dt class="col-sm-3">Liczba głosów</dt>
+        <dd class="col-sm-9">
+            @if (Model.VoteCount != null)
+            {
+            @(Model.VoteCount.Value.ToString())
+            }
+            else
+            {
+            @("brak")
+            }
+        </dd>
+    </dl>
+</div>
+
+<h3>Obsada filmu</h3>
+
+<div class="accordion" id="castAccordion">
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingCast">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCast" aria-expanded="false" aria-controls="collapseCast">
+                Pokaż obsadę
+            </button>
+        </h2>
+        <div id="collapseCast" class="accordion-collapse collapse" aria-labelledby="headingCast" data-bs-parent="#castAccordion">
+            <div class="accordion-body">
+                @if (Model.MovieCasts != null && Model.MovieCasts.Any())
+                {
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Postać</th>
+                        <th>Aktor</th>
+                        <th>Kolejność</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var cast in Model.MovieCasts.OrderBy(c => c.CastOrder))
+                    {
+                    <tr>
+                        <td>@(!string.IsNullOrWhiteSpace(cast.CharacterName) ? cast.CharacterName : "brak")</td>
+                        <td>@(cast.Person?.PersonName ?? "brak")</td>
+                        <td>@(cast.CastOrder.HasValue ? cast.CastOrder.ToString() : "brak")</td>
+                    </tr>
+                    }
+                    </tbody>
+                </table>
+                }
+                else
+                {
+                <p>Brak obsady dla tego filmu.</p>
+                }
+
+                <a asp-action="AddToCast" asp-route-id="@Model.MovieId" class="btn btn-primary mt-3">Dodaj do obsady</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-3">
+    <a asp-action="Index" class="btn btn-secondary">Powrót do listy</a>
+</div>

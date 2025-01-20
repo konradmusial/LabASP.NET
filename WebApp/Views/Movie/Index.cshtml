@@ -1,0 +1,67 @@
+@model PaginatedList<WebApp.Models.Movies.Movie>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>Budget</th>
+        <th>Homepage</th>
+        <th>Release Date</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var movie in Model)
+    {
+    <tr>
+        <td><a href="@Url.Action("Details", new { id = movie.MovieId })">@(!string.IsNullOrWhiteSpace(movie.Title) ? movie.Title : "brak")</a></td>
+        <td>@(movie.Budget.HasValue ? $"${movie.Budget}" : "brak")</td>
+        <td>@(string.IsNullOrWhiteSpace(movie.Homepage) ? "brak" : movie.Homepage)</td>
+        <td>@(movie.ReleaseDate.HasValue ? movie.ReleaseDate.Value.ToString("yyyy-MM-dd") : "brak")</td>
+    </tr>
+    }
+    </tbody>
+</table>
+
+<div>
+    <nav>
+        <ul class="pagination">
+            @if (Model.HasPreviousPage)
+            {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("Index", new { pageNumber = 1 })">Pierwsza</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("Index", new { pageNumber = Model.PageIndex - 1 })">Poprzednia</a>
+            </li>
+            }
+
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+            if (i == Model.PageIndex || (i <= 3 || i > Model.TotalPages - 3) || Math.Abs(i - Model.PageIndex) <= 2)
+            {
+            <li class="page-item @(i == Model.PageIndex ? "active" : "")">
+                <a class="page-link" href="@Url.Action("Index", new { pageNumber = i })">@i</a>
+            </li>
+            }
+            else if (i == 4 && Model.PageIndex > 5)
+            {
+            <li class="page-item"><span class="page-link">...</span></li>
+            }
+            else if (i == Model.TotalPages - 3 && Model.PageIndex < Model.TotalPages - 4)
+            {
+            <li class="page-item"><span class="page-link">...</span></li>
+            }
+            }
+
+            @if (Model.HasNextPage)
+            {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("Index", new { pageNumber = Model.PageIndex + 1 })">Następna</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("Index", new { pageNumber = Model.TotalPages })">Ostatnia</a>
+            </li>
+            }
+        </ul>
+    </nav>
+</div>
