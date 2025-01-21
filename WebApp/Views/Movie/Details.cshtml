@@ -138,11 +138,11 @@
                     <tbody>
                     @foreach (var cast in Model.MovieCasts.OrderBy(c => c.CastOrder))
                     {
-                    <tr>
-                        <td>@(!string.IsNullOrWhiteSpace(cast.CharacterName) ? cast.CharacterName : "brak")</td>
-                        <td>@(cast.Person?.PersonName ?? "brak")</td>
-                        <td>@(cast.CastOrder.HasValue ? cast.CastOrder.ToString() : "brak")</td>
-                    </tr>
+                        <tr>
+                            <td>@(!string.IsNullOrWhiteSpace(cast.CharacterName) ? cast.CharacterName : "brak")</td>
+                            <td>@(cast.Person?.PersonName ?? "brak")</td>
+                            <td>@(cast.CastOrder.HasValue ? cast.CastOrder.ToString() : "brak")</td>
+                        </tr>
                     }
                     </tbody>
                 </table>

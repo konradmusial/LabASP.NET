@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ using Movie = WebApp.Models.Movies.Movie;
 
 namespace WebApp.Controllers
 {
+    [Authorize]
     public class MovieController : Controller
     {
         private readonly MoviesContext _context;
@@ -48,11 +50,23 @@ namespace WebApp.Controllers
 
             if (_inMemoryCast.ContainsKey(movie.MovieId))
             {
+                var tempCasts = _inMemoryCast[movie.MovieId];
+                foreach (var cast in tempCasts)
+                {
+                    if (cast.Person == null)
+                    {
+                        cast.Person = new Person
+                        {
+                            PersonId = -1,
+                            PersonName = "Tymczasowy aktor"
+                        };
+                    }
+                }
+
                 movie.MovieCasts = movie.MovieCasts
-                    .Concat(_inMemoryCast[movie.MovieId])
+                    .Concat(tempCasts)
                     .ToList();
             }
-            
 
             return View(movie);
         }
@@ -125,7 +139,7 @@ namespace WebApp.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddToCast(MovieCast movieCast)
+        public IActionResult AddToCast(MovieCast movieCast, string PersonName)
         {
             if (ModelState.IsValid)
             {
@@ -135,6 +149,12 @@ namespace WebApp.Controllers
                 {
                     _inMemoryCast[movieId] = new List<MovieCast>();
                 }
+                
+                movieCast.Person = new Person
+                {
+                    PersonId = -1, 
+                    PersonName = PersonName
+                };
 
                 _inMemoryCast[movieId].Add(movieCast);
 
@@ -144,9 +164,9 @@ namespace WebApp.Controllers
             ViewBag.MovieId = movieCast.MovieId;
             return View(movieCast);
         }
+
         public IActionResult AddToCast(int id)
         {
-            // Przekazujemy ID filmu do widoku
             ViewBag.MovieId = id;
             return View();
         }
